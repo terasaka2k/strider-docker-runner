@@ -1,3 +1,4 @@
+require("6to5/register");
 var Runner = require('strider-simple-runner').Runner
   , runDocker = require('./lib/run');
 
