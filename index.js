@@ -6,7 +6,7 @@ var create = function(emitter, config, context, done){
   config.processJob = runDocker;
   var runner = new Runner(emitter, config);
   runner.id = 'docker';
-  runner.loadExtensions(context.extensionPaths, function (err) {
+  runner.loadExtensions(context.extensionPaths, function(err) {
     done(err, runner);
   });
 };
