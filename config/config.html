@@ -24,9 +24,15 @@
     </div>
   </div>
   <div class="control-group">
+    <label class="control-label">Binds</label>
+    <div class="controls">
+      <input ng-model="config.binds" ng-list placeholder="comma separated list of volume bindings. Example: /host_data:/container_data" class="input-block-level input-xxlarge" type="text">
+    </div>
+  </div>
+  <div class="control-group">
     <label class="control-label">Volumes</label>
     <div class="controls">
-      <input ng-model="config.volumes" ng-list placeholder="comma separated list of volumes to mount" class="input-block-level input-xxlarge" type="text">
+      <input ng-model="config.volumes" ng-list placeholder="comma separated list of volumes to mount. Example: /shared_vol" class="input-block-level input-xxlarge" type="text">
     </div>
   </div>
   <div class="control-group">
