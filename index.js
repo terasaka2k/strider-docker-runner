@@ -1,15 +1,15 @@
 var Runner = require('strider-simple-runner').Runner
-  , runDocker = require('./lib/run')
+  , runDocker = require('./lib/run');
 
 var create = function(emitter, config, context, done){
-  config = config || {}
-  config.processJob = runDocker
-  var runner = new Runner(emitter, config)
-  runner.id = 'docker'
+  config = config || {};
+  config.processJob = runDocker;
+  var runner = new Runner(emitter, config);
+  runner.id = 'docker';
   runner.loadExtensions(context.extensionPaths, function (err) {
-    done(err, runner)
-  })
-}
+    done(err, runner);
+  });
+};
 
 module.exports = {
   create: create,
@@ -18,8 +18,8 @@ module.exports = {
     port: Number,
     socketPath: String,
     dns: [String],
-    docker_host: String,
+    dockerHost: String,
     volumes: [String],
-    volumes_from: [String]
+    volumesFrom: [String]
   }
-}
+};

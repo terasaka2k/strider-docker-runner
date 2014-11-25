@@ -6,7 +6,7 @@
   <div class="control-group">
     <label class="control-label">DOCKER_HOST</label>
     <div class="controls">
-      <input ng-model="config.docker_host" placeholder="Docker remote host (defaults to env var DOCKER_HOST)" class="input-block-level input-xxlarge" type="text">
+      <input ng-model="config.dockerHost" placeholder="Docker remote host (defaults to env var DOCKER_HOST)" class="input-block-level input-xxlarge" type="text">
     </div>
   </div>
 <hr />
@@ -32,7 +32,7 @@
   <div class="control-group">
     <label class="control-label">VolumesFrom</label>
     <div class="controls">
-      <input ng-model="config.volumes_from" ng-list placeholder="comma separated list of volumes from other containers" class="input-block-level input-xxlarge" type="text">
+      <input ng-model="config.volumesFrom" ng-list placeholder="comma separated list of volumes from other containers" class="input-block-level input-xxlarge" type="text">
     </div>
   </div>
   <div class="control-group">
@@ -47,7 +47,7 @@
     <label class="control-label">PublishAllPorts</label>
     <div class="controls checkbox">
       <label>
-        <input type="checkbox" ng-model="config.publishPorts">
+        <input type="checkbox" ng-model="config.publishAllPorts">
       </label>
     </div>
   </div>
