@@ -1,10 +1,16 @@
-require("6to5/register");
+require("6to5/register")({
+  experimental: true
+});
+
 var Runner = require('strider-simple-runner').Runner
   , runDocker = require('./lib/run');
 
 var create = function(emitter, config, context, done){
   config = config || {};
-  config.processJob = runDocker;
+  Object.assign(config, {
+    processJob: runDocker
+  });
+
   var runner = new Runner(emitter, config);
   runner.id = 'docker';
   runner.loadExtensions(context.extensionPaths, function(err) {
@@ -15,6 +21,7 @@ var create = function(emitter, config, context, done){
 module.exports = {
   create: create,
   config: {
+    namePrefix: String,
     host: String,
     port: Number,
     socketPath: String,
