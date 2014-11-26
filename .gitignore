@@ -2,3 +2,8 @@
 /npm-debug.log
 /.idea/
 /*.iml
+
+/config/
+/lib/
+/static/
+/index.js
