@@ -99,6 +99,7 @@ function create(createOptions, docker, containerConfig, done) {
             debug('Stopped the container=%s', shortId);
           });
         });
+        kill.id = container.id;
         done(err, spawn.bind(null, streamc), kill);
       });
     }
@@ -150,7 +151,7 @@ function create(createOptions, docker, containerConfig, done) {
           }
         }));
 
-      debug('Running command: container=%s, command=%s, args=%o', shortId, command, args);
+      debug('Running command in container=%s, command=%s, args=%o', shortId, command, args);
 
       streamc.write(JSON.stringify({command: command, args: args, type: 'start'}) + '\n');
     }

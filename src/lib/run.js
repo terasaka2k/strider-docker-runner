@@ -14,6 +14,8 @@ module.exports = function(job, provider, plugins, config, next) {
   const { branchConfig: { runner: { config: runnerConfig } } } = config;
 
   initDocker(runnerConfig, function(err, docker) {
+    let alreadyCancelled = false;
+
     if (err) {
       return next(new Error('Cannot connect to Docker with options ' + JSON.stringify(err.connectOptions)));
     }
@@ -27,13 +29,23 @@ module.exports = function(job, provider, plugins, config, next) {
       time: new Date()
     });
 
+    config.io.on('job.cancel', () => alreadyCancelled = true);
+
     createSlave(docker, slaveName, slaveConfig, function(err, spawn, kill) {
+      const shortJobId = job._id.toString().substr(0, 8);
+
       if (err) {
         return next(err);
       }
+      debug('Container=%s is ready for job=%s', dockerUtil.shortenId(kill.id), shortJobId);
+
+      if (alreadyCancelled) {
+        debug('Killing the container of already cancelled job=%s', shortJobId);
+        killContainer(job._id);
+        return next();
+      }
 
       config.io.on('job.cancel', killContainer);
-      config.io.on('job.done', killContainer);
 
       Object.assign(config, { spawn });
 
@@ -41,11 +53,14 @@ module.exports = function(job, provider, plugins, config, next) {
         if (err) {
           debug('Error while processing job=%s %o', job._id, job);
         }
+        killContainer(job._id);
         next.call(this, err, ...args);
       });
 
       function killContainer(jobId) {
-        const shortJobId = jobId.toString().substr(0, 8);
+        if (jobId.toString() !== job._id.toString()) {
+          return;
+        }
 
         kill((err) => {
           if (err) {
