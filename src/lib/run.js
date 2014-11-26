@@ -27,31 +27,28 @@ module.exports = function(job, provider, plugins, config, next) {
       image: config.image || DEFAULT_IMAGE,
       env: env
     }, config.branchConfig.runner.config);
+
     config.io.emit('job.status.command.comment', job._id, {
       comment: 'Creating docker container from ' + slaveConfig.image,
       plugin: 'docker',
       time: new Date()
     });
+
     createSlave(docker, slaveConfig, function(err, spawn, kill) {
       if (err) {
         return next(err);
       }
-      config.spawn = spawn;
-      processJob(job, provider, plugins, config, function(jobErr, ...args) {
+
+      config.io.on('job.cancel', kill);
+      config.io.on('job.done', kill);
+
+      Object.assign(config, { spawn });
+
+      processJob(job, provider, plugins, config, function(err, ...args) {
         if (err) {
-          debug('Error while processing job', job._id);
+          debug('Error while processing job=%s %o', job._id, job);
         }
-        kill(function(killErr) {
-          if (killErr) {
-            debug('Failed to kill docker container!', killErr);
-            console.error('Failed to kill docker container!', killErr);
-          }
-          if (jobErr || killErr) {
-            next.call(this, new Error(jobErr || killErr), ...args);
-          } else {
-            next.call(this, void 0, ...args);
-          }
-        });
+        next.call(this, err, ...args);
       });
     });
   });

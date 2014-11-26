@@ -52,7 +52,8 @@ function create(createOptions, docker, config, done) {
       return done(new Error(err));
     }
     const shortId = dockerUtil.shortenId(container.id);
-    debug('Creaated a container', shortId);
+
+    debug('Created a container=%s', shortId);
 
     container.attach({
       stream: true, stdin: true,
@@ -91,17 +92,17 @@ function create(createOptions, docker, config, done) {
             if (err) {
               debug('Error while killing the container, which failed to start', err);
             } else {
-              debug('Killed the container, which had failed to start', shortId);
+              debug('Killed the container%, which had failed to start', shortId);
             }
           });
           return done(new Error(err));
         }
-        debug('Started the container', shortId, data);
+        debug('Started the container=%s', shortId, data);
 
         container.wait(function(err, data) {
-          debug('Done with the container', shortId, err, data);
+          debug('Done with the container=%s', shortId, err, data);
           container.stop(function(err, _) {
-            debug('Stopped the container', shortId);
+            debug('Stopped the container=%s', shortId);
           });
         });
         done(err, spawn.bind(null, streamc), kill);
@@ -109,10 +110,15 @@ function create(createOptions, docker, config, done) {
     }
 
     function kill(done) {
-      container.remove({
-        force: true, // Stop container and remove
-        v: true // Remove any attached volumes
-      }, done);
+      debug('Killing the container=%s', shortId);
+
+      container.remove({ force: true, v: true }, function(err, data) {
+        if (err) {
+          debug('Failed to kill docker container=%s', shortId, err);
+          console.error('Failed to kill docker container=%s', shortId, err);
+        }
+        done(err, data);
+      });
     }
 
     function spawn(streamc, command, args, options, done) {
@@ -134,7 +140,7 @@ function create(createOptions, docker, config, done) {
         .pipe(es.split())
         .pipe(es.parse())
         .pipe(es.mapSync(function(data) {
-          debug('got an event', data);
+          debug('Got an event from container=%s', shortId, data);
           if (data.event === 'stdout') {
             proc.stdout.write(data.data);
           }
@@ -148,7 +154,7 @@ function create(createOptions, docker, config, done) {
           }
         }));
 
-      debug('Running command', shortId, command, args);
+      debug('Running command: container=%s, command=%s, args=%o', shortId, command, args);
 
       streamc.write(JSON.stringify({command: command, args: args, type: 'start'}) + '\n');
     }
@@ -161,7 +167,7 @@ module.exports = function(createOptions, docker, config, done) {
       findLocalImage(docker, createOptions.Image, callback);
     }, function(localImage, callback) {
       if (localImage) {
-        debug('Container image is already locally', dockerUtil.shortenId(localImage.Id));
+        debug('Container image is already locally: Image=%s', dockerUtil.shortenId(localImage.Id));
         return callback();
       }
       debug('Unable to find image "%s" locally', createOptions.Image);
