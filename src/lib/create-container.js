@@ -46,7 +46,7 @@ function pull(docker, image, done) {
   });
 }
 
-function create(createOptions, docker, config, done) {
+function create(createOptions, docker, containerConfig, done) {
   docker.createContainer(createOptions, function(err, container) {
     if (err) {
       return done(new Error(err));
@@ -68,20 +68,14 @@ function create(createOptions, docker, config, done) {
         return done(new Error('Failed to attach container stream'));
       }
 
-      var volumes = {};
-      if (config.volumes) {
-        config.volumes.forEach(function(v) {
-          volumes[v] = {};
-        });
-      }
 
       const startOptions = {
-        Privileged: !!config.privileged,
-        PublishAllPorts: !!config.publishAllPorts,
-        Dns: config.dns,
-        Binds: config.binds,
-        Volumes: volumes,
-        VolumesFrom: config.volumesFrom
+        Privileged: !!containerConfig.privileged,
+        PublishAllPorts: !!containerConfig.publishAllPorts,
+        Dns: containerConfig.dns,
+        Binds: containerConfig.binds,
+        Volumes: containerConfig.volumes,
+        VolumesFrom: containerConfig.volumesFrom
       };
 
       // start, and wait for it to be done
@@ -116,6 +110,8 @@ function create(createOptions, docker, config, done) {
         if (err) {
           debug('Failed to kill docker container=%s', shortId, err);
           console.error('Failed to kill docker container=%s', shortId, err);
+        } else {
+          debug('Killed the container=%s', shortId);
         }
         done(err, data);
       });

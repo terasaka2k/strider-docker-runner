@@ -16,14 +16,15 @@ const create = function(emitter, config, context, done){
 module.exports = {
   create: create,
   config: {
-    namePrefix: String,
-    host: String,
-    port: Number,
-    socketPath: String,
-    dns: [String],
     dockerHost: String,
-    binds: [String],
-    volumes: [String],
-    volumesFrom: [String]
+    namePrefix: String,
+    container: {
+      host: String,
+      port: Number,
+      dns: [String],
+      binds: [String],
+      volumes: [String],
+      volumesFrom: [String]
+    }
   }
 };

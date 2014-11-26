@@ -10,7 +10,9 @@
     "title": "Docker",
     "webapp": "index.js",
     "icon": "icon.png",
-    "config": true
+    "config": {
+      "controller": "DockerRunnerController"
+    }
   },
   "keywords": [
     "docker",

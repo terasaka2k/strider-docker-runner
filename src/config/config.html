@@ -20,38 +20,38 @@
   <div class="control-group">
     <label class="control-label">Image</label>
     <div class="controls">
-      <input ng-model="config.image" placeholder="Docker image to use. Default: strider/strider-docker-slave" class="input-block-level input-xxlarge" type="text">
+      <input ng-model="config.container.image" placeholder="Docker image to use. Default: strider/strider-docker-slave" class="input-block-level input-xxlarge" type="text">
     </div>
   </div>
   <div class="control-group">
     <label class="control-label">Dns</label>
     <div class="controls">
-      <input ng-model="config.dns" ng-list placeholder="comma separated list of dns servers" class="input-block-level input-xxlarge" type="text">
+      <input ng-model="config.container.dns" ng-list placeholder="comma separated list of dns servers" class="input-block-level input-xxlarge" type="text">
     </div>
   </div>
   <div class="control-group">
     <label class="control-label">Binds</label>
     <div class="controls">
-      <input ng-model="config.binds" ng-list placeholder="comma separated list of volume bindings. Example: /host_data:/container_data" class="input-block-level input-xxlarge" type="text">
+      <input ng-model="config.container.binds" ng-list placeholder="comma separated list of volume bindings. Example: /host_data:/container_data" class="input-block-level input-xxlarge" type="text">
     </div>
   </div>
   <div class="control-group">
     <label class="control-label">Volumes</label>
     <div class="controls">
-      <input ng-model="config.volumes" ng-list placeholder="comma separated list of volumes to mount. Example: /shared_vol" class="input-block-level input-xxlarge" type="text">
+      <input ng-model="config.container.volumes" ng-list placeholder="comma separated list of volumes to mount. Example: /shared_vol" class="input-block-level input-xxlarge" type="text">
     </div>
   </div>
   <div class="control-group">
     <label class="control-label">VolumesFrom</label>
     <div class="controls">
-      <input ng-model="config.volumesFrom" ng-list placeholder="comma separated list of volumes from other containers" class="input-block-level input-xxlarge" type="text">
+      <input ng-model="config.container.volumesFrom" ng-list placeholder="comma separated list of volumes from other containers" class="input-block-level input-xxlarge" type="text">
     </div>
   </div>
   <div class="control-group">
     <label class="control-label">Privileged</label>
     <div class="controls checkbox">
       <label>
-        <input type="checkbox" ng-model="config.privileged">
+        <input type="checkbox" ng-model="config.container.privileged">
       </label>
     </div>
   </div>
@@ -59,7 +59,7 @@
     <label class="control-label">PublishAllPorts</label>
     <div class="controls checkbox">
       <label>
-        <input type="checkbox" ng-model="config.publishAllPorts">
+        <input type="checkbox" ng-model="config.container.publishAllPorts">
       </label>
     </div>
   </div>
