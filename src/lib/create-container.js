@@ -2,7 +2,7 @@ var stream = require('stream');
 var EventEmitter = require('events').EventEmitter;
 var es = require('event-stream');
 var debug = require('./my-debug')(module);
-var async = require('async');
+var Async = require('async');
 var demuxer = require('./demuxer');
 var inspect = require('util').inspect;
 const dockerUtil = require('./docker-util');
@@ -156,7 +156,7 @@ function create(createOptions, docker, config, done) {
 }
 
 module.exports = function(createOptions, docker, config, done) {
-  async.waterfall([
+  Async.waterfall([
     function(callback) {
       findLocalImage(docker, createOptions.Image, callback);
     }, function(localImage, callback) {

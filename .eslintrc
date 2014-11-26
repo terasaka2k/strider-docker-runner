@@ -3,8 +3,5 @@
     "strict": 0,
     "no-use-before-define": [2, "nofunc"],
     "quotes": [2, "single", "avoid-escape"]
-  },
-  "env": {
-    "node": true
   }
 }

@@ -37,17 +37,20 @@ module.exports = function(job, provider, plugins, config, next) {
         return next(err);
       }
       config.spawn = spawn;
-      processJob(job, provider, plugins, config, function(err) {
+      processJob(job, provider, plugins, config, function(jobErr, ...args) {
         if (err) {
-          next(new Error(err));
+          debug('Error while processing job', job._id);
         }
-        var args = arguments;
-        kill(function(err) {
-          if (err) {
-            debug('Failed to kill docker container!', err);
-            console.error('Failed to kill docker container!', err);
+        kill(function(killErr) {
+          if (killErr) {
+            debug('Failed to kill docker container!', killErr);
+            console.error('Failed to kill docker container!', killErr);
           }
-          next.apply(this, args);
+          if (jobErr || killErr) {
+            next.call(this, new Error(jobErr || killErr), ...args);
+          } else {
+            next.call(this, void 0, ...args);
+          }
         });
       });
     });

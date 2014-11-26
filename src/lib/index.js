@@ -1,9 +1,5 @@
-require("6to5/register")({
-  experimental: true
-});
-
 var Runner = require('strider-simple-runner').Runner
-  , runDocker = require('./lib/run');
+  , runDocker = require('./run');
 
 var create = function(emitter, config, context, done){
   config = config || {};
