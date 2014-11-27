@@ -14,6 +14,9 @@ const files = [
   'lib/**/*',
   'index.js'
 ];
+const rmFiles = files.concat([
+  'config', 'static', 'lib'
+]);
 
 gulp.task('build', function() {
   const jsFilter = filter('**/*.js');
@@ -48,7 +51,7 @@ gulp.task('watch', function() {
 });
 
 gulp.task('clean', function() {
-  return gulp.src(files, {read: false})
+  return gulp.src(rmFiles, {read: false})
     .pipe(clean());
 });
 

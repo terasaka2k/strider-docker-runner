@@ -51,6 +51,6 @@
     "mocha": "^1.21.4"
   },
   "scripts": {
-    "prepublish": "gulp clean build"
+    "prepublish": "gulp clean && gulp build"
   }
 }
