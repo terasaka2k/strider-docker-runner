@@ -6,11 +6,12 @@ const filter = require('gulp-filter');
 const cached = require('gulp-cached');
 const clean = require('gulp-clean');
 const filelog = require('gulp-filelog');
+const wrapper = require('gulp-wrapper');
 
 const files = [
-  'config', 'config/**/*',
-  'static', 'static/**/*',
-  'lib', 'lib/**/*',
+  'config/**/*',
+  'static/**/*',
+  'lib/**/*',
   'index.js'
 ];
 
@@ -26,6 +27,16 @@ gulp.task('build', function() {
       runtime: true,
       experimental: true,
       sourceMap: true
+    }))
+    .pipe(wrapper({
+      header: function(file) { return ['',
+        '/**',
+        ' *',
+        ' * THIS IS A GENERATED FILE',
+        ' * source: ' + file.base + file.relative,
+        ' */',
+        '\n'].join('\n');
+      }
     }))
     .pipe(jsFilter.restore())
     .pipe(plumber.stop())

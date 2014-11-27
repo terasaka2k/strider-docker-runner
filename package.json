@@ -47,9 +47,10 @@
     "gulp-filelog": "^0.4.1",
     "gulp-filter": "^1.0.2",
     "gulp-plumber": "^0.6.6",
+    "gulp-wrapper": "^0.1.5",
     "mocha": "^1.21.4"
   },
   "scripts": {
-    "prepublish": "gulp"
+    "prepublish": "gulp clean build"
   }
 }
