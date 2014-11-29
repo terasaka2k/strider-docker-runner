@@ -43,12 +43,14 @@
     "chai": "^1.9.1",
     "gulp": "^3.8.10",
     "gulp-6to5": "^1.0.2",
+    "gulp-cached": "^1.0.1",
     "gulp-clean": "^0.3.1",
     "gulp-filelog": "^0.4.1",
     "gulp-filter": "^1.0.2",
     "gulp-plumber": "^0.6.6",
     "gulp-wrapper": "^0.1.5",
-    "mocha": "^1.21.4"
+    "mocha": "^1.21.4",
+    "strider-extension-loader": "^0.4.4"
   },
   "scripts": {
     "prepublish": "gulp clean && gulp build"
