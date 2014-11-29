@@ -28,19 +28,13 @@
   "dependencies": {
     "6to5": "^1.14.2",
     "async": "~0.9.0",
-    "debug": "^1.0.4",
-    "dockerode": "^2.0.1",
-    "dockerode-optionator": "^1.0.1",
     "event-stream": "^3.1.7",
     "lodash": "^2.4.1",
     "shell-quote": "^1.4.2",
     "ssh2": "^0.3.4",
-    "strider-runner-core": "^2.0.0",
-    "strider-simple-runner": "^0.13.0",
     "uri-js": "^1.4.2"
   },
   "devDependencies": {
-    "chai": "^1.9.1",
     "gulp": "^3.8.10",
     "gulp-6to5": "^1.0.2",
     "gulp-cached": "^1.0.1",
@@ -48,9 +42,16 @@
     "gulp-filelog": "^0.4.1",
     "gulp-filter": "^1.0.2",
     "gulp-plumber": "^0.6.6",
-    "gulp-wrapper": "^0.1.5",
-    "mocha": "^1.21.4",
-    "strider-extension-loader": "^0.4.4"
+    "gulp-wrapper": "^0.1.5"
+  },
+  "peerDependencies": {
+    "dockerode": "^2.0",
+    "dockerode-optionator": "^1.0",
+    "debug": "^1.0",
+    "strider": "^1.6",
+    "strider-runner-core": "^2.0",
+    "strider-simple-runner": "^0.13",
+    "strider-extension-loader": "^0.4"
   },
   "scripts": {
     "prepublish": "gulp clean && gulp build"
