@@ -66,3 +66,10 @@
 </fieldset>
 <button class="btn btn-primary" ng-click="save()">Save</button>
 </div>
+
+<hr />
+<div class="well">
+  <ul>
+    <li ng-repeat="container in runningContainers">[[ container.Names ]] [[ container.Id.substr(0, 8) ]] ([[ container.Status ]])</li>
+  </ul>
+</div>

@@ -5,9 +5,7 @@ var initDocker = require('./init');
 const dockerUtil = require('./docker-util');
 var debug = require('./my-debug')(module);
 
-
-const DEFAULT_IMAGE = 'strider/strider-docker-slave';
-const DEFAULT_NAME_PREFIX = 'strider-job-';
+const { DEFAULT_IMAGE, DEFAULT_NAME_PREFIX } = require('./defaults');
 
 
 module.exports = function(job, provider, plugins, config, next) {

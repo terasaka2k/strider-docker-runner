@@ -1,6 +1,10 @@
 const app = window.app;
 
-app.controller('DockerRunnerController', ['$scope', function ($scope) {
+app.controller('DockerRunnerController', ($scope, $http) => {
+  $http.get('../api/docker/containers', { params: { branch: $scope.branch.name } }).then((response) => {
+    $scope.runningContainers = response.data;
+  });
+
   $scope.saving = false;
 
   $scope.$watch('runnerConfigs[branch.name][branch.runner.id]', function (value) {
@@ -13,4 +17,4 @@ app.controller('DockerRunnerController', ['$scope', function ($scope) {
       $scope.saving = false;
     });
   };
-}]);
+});
