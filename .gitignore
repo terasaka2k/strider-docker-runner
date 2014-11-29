@@ -7,3 +7,5 @@
 /lib/
 /static/
 /index.js
+
+_*.js

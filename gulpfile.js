@@ -21,6 +21,10 @@ const rmFiles = files.concat([
 gulp.task('build', function() {
   const jsFilter = filter('**/*.js');
 
+  if (~this.seq.indexOf('watch')) {
+    files.push('**/_*.js');
+  }
+
   return gulp.src(files.map(function(s) { return 'src/' + s; }), { base: 'src/' })
     .pipe(cached('everyfiles'))
     .pipe(filelog())
