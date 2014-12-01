@@ -1,17 +1,19 @@
 const
   Runner = require('strider-simple-runner').Runner,
-  initDocker = require('./init'),
+  routes = require('./routes'),
   runDocker = require('./run'),
   namespace = require('strider-extension-loader/lib/namespace'),
   debug = require('./my-debug')(module);
 
-const { DEFAULT_NAME_PREFIX } = require('./defaults');
 
 const create = function(emitter, config, context, done){
-  routes('docker', context);
+  routeAPI('docker', context);
+  const { models: { Job } } = context;
 
   config = config || {};
   Object.assign(config, { processJob: runDocker });
+
+  emitter.on('plugin.docker.container.started', (...args) => recordJobContainer(Job, ...args));
 
   const runner = new Runner(emitter, config);
   runner.id = 'docker';
@@ -22,6 +24,7 @@ const create = function(emitter, config, context, done){
 
 module.exports = {
   create: create,
+  // FIXME: Should be appConfig instead of config?
   config: {
     dockerHost: String,
     namePrefix: String,
@@ -34,34 +37,20 @@ module.exports = {
       volumesFrom: [String]
     }
   },
-  routes(app, context) {
-    app.get('containers', (req, res, next) => {
-      const config = req.runnerConfig() || {};
-      const prefix = '/' + (config.namePrefix || DEFAULT_NAME_PREFIX).replace(/^\//, '');
-
-      initDocker(config, (err, docker) => {
-        if (err) {
-          debug(err);
-          return res.send(500, err);
-        }
-        docker.listContainers((err, containers) => {
-          if (err) {
-            debug(err);
-            return res.send(500, err);
-          }
-
-          res.send(containers.filter(prefixFilter));
-        });
-      });
-
-      function prefixFilter(container) {
-        return container.Names.some((n) => n.startsWith(prefix));
-      }
-    });
-  }
+  routes
 };
 
-function routes(id, context) {
+
+function recordJobContainer(Job, containerId, job) {
+  Job.findByIdAndUpdate(job._id, { $set: { 'runner.data.containerId': containerId } }, (err) => {
+    if (err) {
+      debug.error('Error while updating job=%s to have its containerId=%s.', job._id, containerId, err);
+    }
+  });
+}
+
+
+function routeAPI(id, context) {
   const mid = context.middleware;
   const app = namespace(context.app, '/:org/:repo/api/' + id, mid.project, runnerConfig);
   module.exports.routes(app, context);

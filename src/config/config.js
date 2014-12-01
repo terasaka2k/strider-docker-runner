@@ -2,7 +2,7 @@ const app = window.app;
 
 app.controller('DockerRunnerController', ($scope, $http) => {
   $http.get('../api/docker/containers', { params: { branch: $scope.branch.name } }).then((response) => {
-    $scope.runningContainers = response.data;
+    $scope.containers = response.data;
   });
 
   $scope.saving = false;

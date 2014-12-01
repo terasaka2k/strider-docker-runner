@@ -31,6 +31,7 @@
     "event-stream": "^3.1.7",
     "lodash": "^2.4.1",
     "moment": "^2.8.4",
+    "ramda": "^0.8.0",
     "shell-quote": "^1.4.2",
     "ssh2": "^0.3.4",
     "uri-js": "^1.4.2"
@@ -43,6 +44,7 @@
     "gulp-filter": "^1.0.2",
     "gulp-plumber": "^0.6.6",
     "gulp-rimraf": "^0.1.1",
+    "gulp-sourcemaps": "^1.2.8",
     "gulp-wrapper": "^0.1.5",
     "request": "^2.49.0",
     "stream-series": "^0.1.1",

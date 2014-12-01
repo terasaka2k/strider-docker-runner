@@ -2,6 +2,8 @@
 const gulp = require('gulp');
 const plumber = require('gulp-plumber');
 const to6 = require('gulp-6to5');
+const espoewr = require('gulp-espower');
+const sourcemaps = require('gulp-sourcemaps');
 const filter = require('gulp-filter');
 const cached = require('gulp-cached');
 const filelog = require('gulp-filelog');
@@ -13,38 +15,47 @@ const files = [
   'lib/**/*',
   'index.js'
 ];
-const rmFiles = files.concat([
+const rmFiles = [].concat(
+  files,
+  files.map(function(f) { return f + '.map'; }),
   'config', 'static', 'lib'
-]);
+);
 
 gulp.task('build', ['compile/src', 'download/es7polyfill']);
 
 gulp.task('compile/src', function() {
+  const path = require('path');
   const jsFilter = filter('**/*.js');
 
   if (~this.seq.indexOf('watch')) {
     files.push('**/_*.js');
   }
 
-  return gulp.src(files.map(function(s) { return 'src/' + s; }), { base: 'src/' })
+  return gulp.src(files.map(function(s) { return path.join('src', s); }), { base: 'src' })
     .pipe(cached('everyfiles'))
     .pipe(filelog())
     .pipe(plumber())
     .pipe(jsFilter)
+    .pipe(sourcemaps.init())
     .pipe(to6({
       runtime: true,
-      experimental: true,
-      sourceMap: true
+      experimental: true
     }))
-    .pipe(wrapper({
-      header: function(file) { return ['',
-        '/**',
-        ' *',
-        ' * THIS IS A GENERATED FILE',
-        ' * source: ' + file.base + file.relative,
-        ' */',
-        '\n'].join('\n');
-      }
+    //.pipe(wrapper({
+    //  header: function(file) { return ['',
+    //    '/**',
+    //    ' *',
+    //    ' * THIS IS A GENERATED FILE',
+    //    ' * source: ' + file.base + file.relative,
+    //    ' *',
+    //    ' */',
+    //    '\n'].join('\n');
+    //  }
+    //}))
+    .pipe(espoewr())
+    .pipe(sourcemaps.write('.', {
+      includeContent: false,
+      sourceRoot: '/src'
     }))
     .pipe(jsFilter.restore())
     .pipe(plumber.stop())

@@ -68,8 +68,20 @@
 </div>
 
 <hr />
-<div class="well">
-  <ul>
-    <li ng-repeat="container in runningContainers">[[ container.Names ]] [[ container.Id.substr(0, 8) ]] ([[ container.Status ]])</li>
-  </ul>
+<div>
+  <div ng-show="containers.jobContainers.length === 0" class="alert alert-info">
+    No running containers for this branch
+  </div>
+  <div ng-show="containers.jobContainers.length" class="alert alert-info">
+    Running containers for this branch
+    <ul>
+      <li ng-repeat="c in containers.jobContainers">[[ c.Id.substr(0, 8) ]] [[ c.Names ]] ([[ c.Status ]])</li>
+    </ul>
+  </div>
+  <div ng-show="containers.zombieContainers.length" class="alert alert-warning" role="alert">
+    Zombie containers (possibly from other branches if having the same namePrefix)
+    <ul>
+      <li ng-repeat="c in containers.zombieContainers">[[ c.Id.substr(0, 8) ]] [[ c.Names ]] ([[ c.Status ]])</li>
+    </ul>
+  </div>
 </div>

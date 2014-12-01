@@ -1,5 +1,8 @@
 {
   "env": {
     "node": true
+  },
+  "rules": {
+    "no-restricted-modules": [2, "assert"] // Use power-assert
   }
 }

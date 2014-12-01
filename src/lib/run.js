@@ -1,15 +1,16 @@
-var createSlave = require('./slave');
-var processJob = require('strider-runner-core').process;
-var _ = require('lodash');
-var initDocker = require('./init');
-const dockerUtil = require('./docker-util');
-var debug = require('./my-debug')(module);
+const
+  R = require('ramda'),
+  createSlave = require('./slave'),
+  processJob = require('strider-runner-core').process,
+  initDocker = require('./init'),
+  dockerUtil = require('./docker-util'),
+  debug = require('./my-debug')(module);
 
 const { DEFAULT_IMAGE, DEFAULT_NAME_PREFIX } = require('./defaults');
 
 
 module.exports = function(job, provider, plugins, config, next) {
-  const { branchConfig: { runner: { config: runnerConfig } } } = config;
+  const runnerConfig = R.path('branchConfig.runner.config.runnerConfig') || {};
 
   initDocker(runnerConfig, function(err, docker) {
     let alreadyCancelled = false;
@@ -30,11 +31,14 @@ module.exports = function(job, provider, plugins, config, next) {
     config.io.on('job.cancel', () => alreadyCancelled = true);
 
     createSlave(docker, slaveName, slaveConfig, function(err, spawn, kill) {
-      const shortJobId = job._id.toString().substr(0, 8);
-
       if (err) {
         return next(err);
       }
+      const { id: containerId } = kill;
+
+      config.io.emit('plugin.docker.container.started', containerId, job);
+
+      const shortJobId = job._id.toString().substr(0, 8);
       debug('Container=%s is ready for job=%s', dockerUtil.shortenId(kill.id), shortJobId);
 
       if (alreadyCancelled) {

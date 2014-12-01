@@ -7,5 +7,6 @@
 /lib/
 /static/
 /index.js
+**/*.js.map
 
 _*.js
